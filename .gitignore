@@ -1,0 +1,5 @@
+build/
+payload/build/
+*.user
+.vs/
+out/
