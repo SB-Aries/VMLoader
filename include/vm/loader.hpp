@@ -12,4 +12,4 @@ extern const size_t    kRelocCount;
 
 // Decrypt, allocate, apply relocations, return initialised vm ready to run.
 // Caller owns allocated memory (freed on process exit in shellcode context, so ignored).
-bool janus_load(RiscVm* vm, SyscallTable* sc);
+bool vm_load(RiscVm* vm, SyscallTable* sc);

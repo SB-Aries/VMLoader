@@ -1,13 +1,13 @@
-#include "janus/syscall.hpp"
+#include "vm/syscall.hpp"
 
-void*     janus_get_peb();
-void*     janus_resolve(uint32_t mod_h, uint32_t sym_h);
-uintptr_t janus_host_call(void* fn, uintptr_t* args, int argc);
-void      janus_exit(int code);
+void*     vm_get_peb();
+void*     vm_resolve(uint32_t mod_h, uint32_t sym_h);
+uintptr_t vm_host_call(void* fn, uintptr_t* args, int argc);
+void      vm_exit(int code);
 
 SyscallTable g_win_syscalls = {
-    .get_peb          = janus_get_peb,
-    .host_call        = janus_host_call,
-    .resolve          = janus_resolve,
-    .exit_fn          = janus_exit,
+    .get_peb          = vm_get_peb,
+    .host_call        = vm_host_call,
+    .resolve          = vm_resolve,
+    .exit_fn          = vm_exit,
 };

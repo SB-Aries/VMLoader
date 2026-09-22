@@ -1,5 +1,5 @@
-#include "janus/vm.hpp"
-#include "janus/decode.hpp"
+#include "vm/vm.hpp"
+#include "vm/decode.hpp"
 #include <cstring>
 
 // Shared address space: guest pointers are valid host pointers — no translation needed.

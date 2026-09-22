@@ -18,7 +18,7 @@ _start:
 .Lbss_done:
 
     # sp already set by loader (top of stack region)
-    call    janus_main
+    call    vm_main
 
     li      a7, 3          # ECALL_EXIT
     li      a0, 0

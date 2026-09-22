@@ -1,25 +1,25 @@
-#include "janus/config.hpp"
+#include "vm/config.hpp"
 
-#if JANUS_INJECT_TECHNIQUE == 2
+#if VM_INJECT_TECHNIQUE == 2
 
-#include "janus/inject.hpp"
+#include "vm/inject.hpp"
 
 int main() {
-    janus_execute(nullptr);
+    vm_execute(nullptr);
     return 0;
 }
 
 #else
 
-#include "janus/loader.hpp"
-#include "janus/inject.hpp"
-#include "janus/syscall.hpp"
+#include "vm/loader.hpp"
+#include "vm/inject.hpp"
+#include "vm/syscall.hpp"
 
 int main() {
     RiscVm vm{};
-    if (!janus_load(&vm, &g_win_syscalls))
+    if (!vm_load(&vm, &g_win_syscalls))
         return 1;
-    janus_execute(&vm);
+    vm_execute(&vm);
     return 0;
 }
 

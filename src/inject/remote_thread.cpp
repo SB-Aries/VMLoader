@@ -1,7 +1,7 @@
-#include "janus/config.hpp"
-#if JANUS_INJECT_TECHNIQUE == 2
+#include "vm/config.hpp"
+#if VM_INJECT_TECHNIQUE == 2
 
-#include "janus/inject.hpp"
+#include "vm/inject.hpp"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tlhelp32.h>
@@ -24,8 +24,8 @@ static DWORD find_pid(const char* proc_name) {
     return 0;
 }
 
-void janus_execute(RiscVm*) {
-    DWORD pid = find_pid(JANUS_TARGET_PROCESS);
+void vm_execute(RiscVm*) {
+    DWORD pid = find_pid(VM_TARGET_PROCESS);
     if (!pid) return;
 
     HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);

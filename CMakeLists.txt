@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ── Campaign config ──────────────────────────────────────────────────────────
 # Injection technique: 0=inline, 1=fiber, 2=remote_thread (DLL injection)
-set(JANUS_INJECT_TECHNIQUE 0 CACHE STRING "Injection technique (0=inline, 1=fiber, 2=remote_thread)")
+set(VM_INJECT_TECHNIQUE 0 CACHE STRING "Injection technique (0=inline, 1=fiber, 2=remote_thread)")
 
 # ── VM + Loader library ───────────────────────────────────────────────────────
 add_library(vmcore STATIC
@@ -26,7 +26,7 @@ add_library(vmcore STATIC
 )
 
 target_include_directories(vmcore PUBLIC include)
-target_compile_definitions(vmcore PUBLIC JANUS_INJECT_TECHNIQUE=${JANUS_INJECT_TECHNIQUE})
+target_compile_definitions(vmcore PUBLIC VM_INJECT_TECHNIQUE=${VM_INJECT_TECHNIQUE})
 
 if (MSVC)
     target_compile_options(vmcore PRIVATE /O2 /GS- /W4)
@@ -36,7 +36,7 @@ else()
 endif()
 
 # ── Targets depend on technique ──────────────────────────────────────────────
-if (JANUS_INJECT_TECHNIQUE EQUAL 2)
+if (VM_INJECT_TECHNIQUE EQUAL 2)
     # Technique 2: build injector EXE + payload DLL
 
     add_executable(VMInjector src/main.cpp)

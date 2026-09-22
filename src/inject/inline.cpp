@@ -1,9 +1,9 @@
-#include "janus/config.hpp"
-#if JANUS_INJECT_TECHNIQUE == 0
+#include "vm/config.hpp"
+#if VM_INJECT_TECHNIQUE == 0
 
-#include "janus/inject.hpp"
+#include "vm/inject.hpp"
 
-void janus_execute(RiscVm* vm) {
+void vm_execute(RiscVm* vm) {
     riscvm_run(vm);
 }
 

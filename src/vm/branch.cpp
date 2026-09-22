@@ -1,5 +1,5 @@
-#include "janus/vm.hpp"
-#include "janus/decode.hpp"
+#include "vm/vm.hpp"
+#include "vm/decode.hpp"
 
 
 void handle_jal(RiscVm* vm, uint32_t i) {

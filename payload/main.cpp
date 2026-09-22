@@ -9,8 +9,8 @@
 // WinExec takes 2 args — within host_call's 8-argument limit
 // (CreateProcessA's 10 parameters would not fit).
 
-extern "C" void janus_main() {
-    void* winexec = janus_resolve(jhash_mod("kernel32.dll"), jhash_sym("WinExec"));
+extern "C" void vm_main() {
+    void* winexec = vm_resolve(vm_hash_mod("kernel32.dll"), vm_hash_sym("WinExec"));
     if (!winexec) return;
 
     const char* cmd = "calc.exe";
@@ -18,5 +18,5 @@ extern "C" void janus_main() {
         (uintptr_t)cmd,
         1,                          // SW_SHOWNORMAL
     };
-    janus_host_call(winexec, args, 2);
+    vm_host_call(winexec, args, 2);
 }

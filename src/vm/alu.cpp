@@ -1,5 +1,5 @@
-#include "janus/vm.hpp"
-#include "janus/decode.hpp"
+#include "vm/vm.hpp"
+#include "vm/decode.hpp"
 #include <cstdint>
 
 void handle_lui(RiscVm* vm, uint32_t i) {

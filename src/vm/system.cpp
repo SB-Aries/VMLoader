@@ -1,10 +1,10 @@
-#include "janus/vm.hpp"
-#include "janus/decode.hpp"
+#include "vm/vm.hpp"
+#include "vm/decode.hpp"
 
 // ── SYSTEM (0x73): ECALL / EBREAK ────────────────────────────────────────────
 //
 // ECALL convention:
-//   a7 = JanusEcall number
+//   a7 = VmEcall number
 //   a0 = arg0 / return value
 //   a1 = arg1
 //   a2 = arg2
@@ -26,7 +26,7 @@ void handle_system(RiscVm* vm, uint32_t i) {
     // ECALL
     rv_adv(vm);  // advance before dispatch so return address is correct
     auto& r = vm->regs;
-    switch ((JanusEcall)r[RV_A7]) {
+    switch ((VmEcall)r[RV_A7]) {
         case ECALL_GET_PEB:
             r[RV_A0] = (int64_t)(uintptr_t)vm->syscalls->get_peb();
             break;

@@ -3,7 +3,7 @@
 embed_payload.py <input.elf> <output_blob.cpp>
 
 Reads a RISC-V ELF payload, applies the opcode shuffle (driven by
-JANUS_OPCODE_SEED from config.hpp), XOR-encrypts, and emits a C++ source file
+VM_OPCODE_SEED from config.hpp), XOR-encrypts, and emits a C++ source file
 with the encrypted blob and relocation table for the loader.
 
 Requires: pyelftools  (pip install pyelftools)
@@ -15,7 +15,7 @@ import re
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
 
-# Must stay in sync with include/janus/config.hpp 
+# Must stay in sync with include/vm/config.hpp 
 OPCODE_SEED = 0xDEADBEEF
 XOR_KEY     = 0xC0FFEE4A
 
@@ -29,7 +29,7 @@ def gen_perm(seed: int) -> list[int]:
     return p
 
 def xor_crypt(data: bytearray) -> bytearray:
-    """LCG keystream — must match janus_xor_crypt() in src/loader/crypto.cpp."""
+    """LCG keystream — must match vm_xor_crypt() in src/loader/crypto.cpp."""
     s = XOR_KEY
     out = bytearray(len(data))
     for i, b in enumerate(data):
@@ -124,7 +124,7 @@ extern const size_t   kRelocCount     = {reloc_cnt};
     with open(out_path, 'w') as f:
         f.write(cpp)
 
-    print(f"[janus] payload {len(encrypted)} bytes, {reloc_cnt} relocs → {out_path}")
+    print(f"[vmloader] payload {len(encrypted)} bytes, {reloc_cnt} relocs → {out_path}")
 
 if __name__ == '__main__':
     main()

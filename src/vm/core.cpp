@@ -1,5 +1,5 @@
-#include "janus/vm.hpp"
-#include "janus/config.hpp"
+#include "vm/vm.hpp"
+#include "vm/config.hpp"
 #include <array>
 #include <cstring>
 
@@ -22,7 +22,7 @@ void handle_system   (RiscVm*, uint32_t);
 
 static void handle_illegal(RiscVm* vm, uint32_t) { vm->halted = true; }
 
-// Compile-time Fisher-Yates shuffle driven by JANUS_OPCODE_SEED.
+// Compile-time Fisher-Yates shuffle driven by VM_OPCODE_SEED.
 // embed_payload.py uses the same algorithm to permute opcode fields in the payload binary.
 static constexpr std::array<uint8_t, 32> gen_perm(uint32_t seed) {
     std::array<uint8_t, 32> p{};
@@ -40,7 +40,7 @@ static HandlerFn g_dispatch[32];
 static void init_dispatch() {
     for (auto& h : g_dispatch) h = handle_illegal;
 
-    constexpr auto perm = gen_perm(JANUS_OPCODE_SEED);
+    constexpr auto perm = gen_perm(VM_OPCODE_SEED);
     // perm[real_opcode] = slot in g_dispatch that the payload will use
     g_dispatch[perm[0x00]] = handle_load;
     g_dispatch[perm[0x03]] = handle_misc_mem;

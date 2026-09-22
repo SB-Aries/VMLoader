@@ -1,5 +1,5 @@
-#include "janus/loader.hpp"
-#include "janus/config.hpp"
+#include "vm/loader.hpp"
+#include "vm/config.hpp"
 #include <cstring>
 
 #define WIN32_LEAN_AND_MEAN
@@ -11,16 +11,16 @@ static void* alloc_rw(size_t sz) {
     return VirtualAlloc(nullptr, sz, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 }
 
-void janus_xor_crypt(uint8_t* buf, size_t len);  // crypto.cpp
+void vm_xor_crypt(uint8_t* buf, size_t len);  // crypto.cpp
 
-bool janus_load(RiscVm* vm, SyscallTable* sc) {
-    size_t total = kPayloadSize + JANUS_STACK_SIZE;
+bool vm_load(RiscVm* vm, SyscallTable* sc) {
+    size_t total = kPayloadSize + VM_STACK_SIZE;
     uint8_t* mem = (uint8_t*)alloc_rw(total);
     if (!mem) return false;
 
     // Decrypt payload into allocation
     memcpy(mem, kPayload, kPayloadSize);
-    janus_xor_crypt(mem, kPayloadSize);
+    vm_xor_crypt(mem, kPayloadSize);
 
     // Fix up absolute 64-bit pointers embedded in the payload
     uint64_t base = (uint64_t)(uintptr_t)mem;

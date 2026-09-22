@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(JanusPayload C CXX ASM)
+project(VMPayload C CXX ASM)
 
 # Requires a RISC-V cross-compiler:
 #   apt install gcc-riscv64-linux-gnu g++-riscv64-linux-gnu

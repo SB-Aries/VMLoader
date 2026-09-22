@@ -1,18 +1,18 @@
-#include "janus/syscall.hpp"
-#include "janus/jhash.hpp"
+#include "vm/syscall.hpp"
+#include "vm/vhash.hpp"
 #include <cstdint>
 #include <cstring>
 #include <intrin.h>   // __readgsqword
 
 
-// sdbm over exact-case export names — must match jhash_sym().
+// sdbm over exact-case export names — must match vm_hash_sym().
 static uint32_t hash_str(const char* s) {
     uint32_t h = 0;
     while (*s) h = h * 65599u + (uint8_t)*s++;
     return h;
 }
 
-// Case-insensitive sdbm over a wide DLL name (Length is in bytes) — matches jhash_mod().
+// Case-insensitive sdbm over a wide DLL name (Length is in bytes) — matches vm_hash_mod().
 static uint32_t hash_wname_ci(const wchar_t* wname, uint16_t len_bytes) {
     uint32_t h = 0;
     uint16_t n = len_bytes / 2;
@@ -50,13 +50,13 @@ static void* get_export(void* base, uint32_t sym_h) {
 
 //PEB WALK
 
-void* janus_get_peb() {
+void* vm_get_peb() {
     return (void*)__readgsqword(0x60);
 }
 
 // Resolves by hash only — no plaintext module/symbol strings cross the ECALL boundary.
-void* janus_resolve(uint32_t mod_h, uint32_t sym_h) {
-    uint8_t* peb  = (uint8_t*)janus_get_peb();
+void* vm_resolve(uint32_t mod_h, uint32_t sym_h) {
+    uint8_t* peb  = (uint8_t*)vm_get_peb();
     uint8_t* ldr  = *(uint8_t**)(peb + 0x18);
     void*    head = *(void**)(ldr + 0x10);   // InLoadOrderModuleList.Flink
     void*    cur  = head;
@@ -78,7 +78,7 @@ void* janus_resolve(uint32_t mod_h, uint32_t sym_h) {
 }
 
 
-uintptr_t janus_host_call(void* fn, uintptr_t* a, int argc) {
+uintptr_t vm_host_call(void* fn, uintptr_t* a, int argc) {
     using F0 = uintptr_t(*)();
     using F1 = uintptr_t(*)(uintptr_t);
     using F2 = uintptr_t(*)(uintptr_t,uintptr_t);
@@ -103,9 +103,9 @@ uintptr_t janus_host_call(void* fn, uintptr_t* a, int argc) {
     }
 }
 
-void janus_exit(int code) {
+void vm_exit(int code) {
     // Resolve ExitProcess from kernel32 and call it — no import needed
-    void* exit_fn = janus_resolve(jhash_mod("kernel32.dll"), jhash_sym("ExitProcess"));
+    void* exit_fn = vm_resolve(vm_hash_mod("kernel32.dll"), vm_hash_sym("ExitProcess"));
     if (exit_fn) ((void(*)(unsigned int))exit_fn)((unsigned int)code);
     __assume(0);  // unreachable
 }

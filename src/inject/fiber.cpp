@@ -1,7 +1,7 @@
-#include "janus/config.hpp"
-#if JANUS_INJECT_TECHNIQUE == 1
+#include "vm/config.hpp"
+#if VM_INJECT_TECHNIQUE == 1
 
-#include "janus/inject.hpp"
+#include "vm/inject.hpp"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -16,7 +16,7 @@ static VOID CALLBACK vm_fiber_proc(LPVOID param) {
     SwitchToFiber(ctx->main_fiber);
 }
 
-void janus_execute(RiscVm* vm) {
+void vm_execute(RiscVm* vm) {
     LPVOID main_fiber = ConvertThreadToFiber(nullptr);
     if (!main_fiber) {
         if (GetLastError() == ERROR_ALREADY_FIBER)
