@@ -35,7 +35,7 @@ void janus_execute(RiscVm*) {
     GetModuleFileNameA(nullptr, dll_path, MAX_PATH);
     char* slash = strrchr(dll_path, '\\');
     if (slash)
-        strcpy(slash + 1, "JanusLoader.dll");
+        strcpy(slash + 1, "VMLoader.dll");
 
     size_t path_len = strlen(dll_path) + 1;
     LPVOID remote_buf = VirtualAllocEx(hProc, nullptr, path_len,
